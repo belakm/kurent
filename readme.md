@@ -10,10 +10,12 @@ Platformer game.
 - **WASD:** movement
 - **SPACE:** shooting
 
+![kurent](https://github.com/belakm/kurent/raw/master/scs.png)
+
 ### Developed by
 
-- CODE: Mitja Belak / Matic Breskvar
-- ART: Lenart Slabe
+- CODE: **Mitja Belak / Matic Breskvar**
+- ART: **Lenart Slabe**
 
 ### Developed with
 
