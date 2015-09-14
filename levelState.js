@@ -9,7 +9,7 @@ var jumpTimer = 0;
 var cursors;
 var jumpButton;
 
-var map, groundLayer, backgroundLayer;
+var map, groundLayer, backgroundLayer, backgroundMovinglayer;
 
 var fireRate = 100;
 var nextFire = 0;
@@ -19,6 +19,7 @@ gameStates.Level = {
     // We define the 3 default Phaser functions
 
     preload: function() {
+
         // That's where we load the game's assets
         game.load.image('btnEndIt','assets/buttons/endit.png');
         game.load.image('btnGameMenu','assets/buttons/gamemenu.png');
@@ -26,18 +27,24 @@ gameStates.Level = {
         //game.load.image('coin','assets/misc/coin.png');
 
         //game.load.image('player','assets/objects/player.png');
-        game.load.spritesheet('player', 'assets/objects/kurent_hoja.png', 32, 64, 6);
+        game.load.spritesheet('player', 'assets/objects/kurent-hoja-2.png', 64, 128, 6);
 		game.load.image('bullet', 'assets/objects/bullet.png');
 
         // LEVEL
         game.load.tilemap('tilemap', 'assets/level/level.json', null, Phaser.Tilemap.TILED_JSON);
 	    game.load.image('tiles', 'assets/level/test.png');
 
+        game.load.tilemap('tilemap2', 'assets/level/kurent-test-level-2.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.image('tiles2', 'assets/level/test-tileset-2.png');
+        game.load.image('tiles3', 'assets/level/test-tileset-2-back.png');
+        game.load.image('tiles4', 'assets/level/test-tileset-2-back-moving.png');
+        //game.load.image('tiles', 'assets/level/test.png');
+
 	    // BULLET SOUNDS
 	    game.load.audio('bulletCollision', 'assets/sounds/bulletcollision.mp3');
 	    game.load.audio('bulletFire', 'assets/sounds/bullet.mp3');
 
-	    game.load.audio('ambience', 'assets/sounds/darth-sidneyous-space-techrough-draft.mp3');
+	    //game.load.audio('ambience', 'assets/sounds/darth-sidneyous-space-techrough-draft.mp3');
     },
 
     create: function() { 
@@ -53,8 +60,8 @@ gameStates.Level = {
 
     	bulletFire = game.add.audio('bulletFire', 0.03, false);
 
-    	ambientMusic = game.add.audio('ambience', 0.3, true);
-    	ambientMusic.play();
+    	//ambientMusic = game.add.audio('ambience', 0.3, true);
+    	//ambientMusic.play();
 
     	initLevel();
     	initControls();
@@ -68,20 +75,33 @@ gameStates.Level = {
         playerDeath();
 
         gameButtons();
+        moveBackground();
     },
 };
+
+var init = 0;
+var playerinit = 362;
+function moveBackground(){
+    //backgroundMovinglayer.x = 0;
+    //ba
+}
 
 function initLevel(){
 	game.physics.startSystem(Phaser.Physics.P2JS);
 	game.stage.backgroundColor = "#a9f0ff";
 	
-	map = game.add.tilemap('tilemap');
-	map.addTilesetImage('test', 'tiles');
+	map = game.add.tilemap('tilemap2');
+	map.addTilesetImage('test-tileset-2', 'tiles2');
+    map.addTilesetImage('test-tileset-2-back', 'tiles3');
+    map.addTilesetImage('test-tileset-2-back-moving', 'tiles4');
 
 	//Add both the background and ground layers. We won't be doing anything with the
 	//GroundLayer though
-	backgroundlayer = map.createLayer('backgroundLayer');
-	groundLayer = map.createLayer('groundLayer');
+	backgroundLayer = map.createLayer('Background-moving');
+    backgroundMovinglayer = map.createLayer('Background-fixed');
+	groundLayer = map.createLayer('Ground');
+
+    backgroundLayer.scrollFactorX = 0.5;
 
 	//Change the world size to match the size of this layer
 	groundLayer.resizeWorld();
@@ -89,13 +109,13 @@ function initLevel(){
 	//map.setCollisionByExclusion([0], true, 'groundLayer');
 
 	//Before you can use the collide function you need to set what tiles can collide
-	map.setCollisionBetween(0,2, true, 'groundLayer');
+	map.setCollisionBetween(0,2, true,'Ground');
 
-	tiles = game.physics.p2.convertTilemap(map, groundLayer, true, true);
-    polygons = game.physics.p2.convertCollisionObjects(map,"polygons");
+	tiles2 = game.physics.p2.convertTilemap(map, groundLayer, true, true);
+    polygons = game.physics.p2.convertCollisionObjects(map,"Object");
 
 	game.physics.p2.restitution = 0.1;
-    game.physics.p2.gravity.y = 300;
+    game.physics.p2.gravity.y = 1000;
 
 	buttonEnd = game.add.button(100, 50, 'btnEndIt', endGame, this, 2, 1, 0);
 	buttonMenu = game.add.button(400, 50, 'btnGameMenu', pauseGame, this, 2, 1, 0);
@@ -110,7 +130,7 @@ function initLevel(){
 }
 
 function initPlayer(){
-	player = game.add.sprite(74, 0, 'player');
+	player = game.add.sprite(362, 362, 'player');
 	game.physics.p2.enable(this.player);
 
 	player.animations.add('walkRight', [0,1,2]);
@@ -153,7 +173,7 @@ function playerMovement(){
 	if (cursors.left.isDown)
     {
         player.body.moveLeft(200);
-        player.animations.play('walkLeft', 8, false);
+        player.animations.play('walkLeft', 12, false);
 
         if (facing != 'left')
         {
@@ -164,7 +184,7 @@ function playerMovement(){
     else if (cursors.right.isDown)
     {
         player.body.moveRight(200);
-        player.animations.play('walkRight', 8, false);
+        player.animations.play('walkRight', 12, false);
 
         if (facing != 'right')
         {
@@ -197,7 +217,7 @@ function playerMovement(){
 
 
     if (cursors.up.isDown && game.time.now > jumpTimer && checkIfCanJump()){
-    	player.body.moveUp(300);
+    	player.body.moveUp(600);
         jumpTimer = game.time.now + 750;
     }
     
@@ -231,7 +251,7 @@ function checkIfCanJump() {
 
 function bulletHitWalls(bullet) {
     console.log(bullet);
-    bullet.kill();
+    //bullet.kill();
 }
 
 function killBullet(bullet){
@@ -259,11 +279,11 @@ function fire() {
         bulletFire.play();
 
         if (facing == 'left') {
-        	bullet.reset(player.x-16, player.y+12);
+        	bullet.reset(player.x-16, player.y+28);
         	bullet.body.moveLeft(1400);
         }
         else {
-        	bullet.reset(player.x+16, player.y+12);
+        	bullet.reset(player.x+16, player.y+28);
         	bullet.body.moveRight(1400);
         }
     }
