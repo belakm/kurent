@@ -63,9 +63,20 @@ gameStates.Level = {
     	//ambientMusic = game.add.audio('ambience', 0.3, true);
     	//ambientMusic.play();
 
+        game.physics.startSystem(Phaser.Physics.P2JS);
+        game.physics.p2.setImpactEvents(true);
+
+        tilesCollisionGroup   = this.physics.p2.createCollisionGroup();
+        polygonCollisionGroup   = this.physics.p2.createCollisionGroup();
+        playerCollisionGroup  = this.physics.p2.createCollisionGroup();
+        bulletCollisionGroup   = this.physics.p2.createCollisionGroup();
+
     	initLevel();
     	initControls();
     	initPlayer();
+
+        game.time.advancedTiming = true;
+        game.physics.p2.updateBoundsCollisionGroup();
     },
 
     update: function() {
@@ -77,6 +88,14 @@ gameStates.Level = {
         gameButtons();
         moveBackground();
     },
+
+    render: function() {
+
+        // Camera
+        game.debug.text('FPS: ' + game.time.fps, 32, 14, "#00ff00"); 
+        game.debug.cameraInfo(game.camera, 32, 32, "#00ff00");
+
+    }
 };
 
 var init = 0;
@@ -87,7 +106,6 @@ function moveBackground(){
 }
 
 function initLevel(){
-	game.physics.startSystem(Phaser.Physics.P2JS);
 	game.stage.backgroundColor = "#a9f0ff";
 	
 	map = game.add.tilemap('tilemap2');
@@ -109,7 +127,7 @@ function initLevel(){
 	//map.setCollisionByExclusion([0], true, 'groundLayer');
 
 	//Before you can use the collide function you need to set what tiles can collide
-	map.setCollisionBetween(0,2, true,'Ground');
+	map.setCollisionBetween(0,50, true,'Ground');
 
 	tiles2 = game.physics.p2.convertTilemap(map, groundLayer, true, true);
     polygons = game.physics.p2.convertCollisionObjects(map,"Object");
@@ -127,6 +145,15 @@ function initLevel(){
 	var style = { font: "65px Arial", fill: "#ff0044", align: "center" };
 
 	t = game.add.text(game.world.centerX-300, 100, text, style);
+
+    for (var i = 0; i < tiles2.length; i++) {
+        var tileBody = tiles2[i];
+        tileBody.setCollisionGroup(tilesCollisionGroup);
+        tileBody.collides(playerCollisionGroup, collisionFloor);
+        tileBody.collides(bulletCollisionGroup);
+    }
+
+    //polygons.setCollisionGroup(polygonCollisionGroup);
 }
 
 function initPlayer(){
@@ -141,6 +168,8 @@ function initPlayer(){
 	player.body.fixedRotation = true;
 	player.body.mass = 2;
 
+    player.touching = false;
+
     //Make the camera follow the sprite
 	game.camera.follow(player);
 
@@ -153,15 +182,23 @@ function initPlayer(){
     bullets.setAll('checkWorldBounds', true);
     bullets.setAll('outOfBoundsKill', true);
     bullets.setAll('body.gravityScale', 0.1);
-    bullets.setAll('onBeginContact', bulletHitWalls(this), this);
+    bullets.setAll('body.mass', 0.01);
 
-    game.physics.p2.setImpactEvents(true);
+    player.body.setCollisionGroup(playerCollisionGroup);
+    player.body.collides(tilesCollisionGroup);
+    player.body.collides(polygonCollisionGroup);
 
-    var playerCollisionGroup = game.physics.p2.createCollisionGroup();
-    var bulletCollisionGroup = game.physics.p2.createCollisionGroup();
+    for (var i = 0; i < bullets.children.length; i++) {
+        var bulletBody = bullets.children[i].body;
+        bulletBody.setCollisionGroup(bulletCollisionGroup);
+        bulletBody.collides(tilesCollisionGroup, collisionBulletFloor);
+        bulletBody.collides(polygonCollisionGroup);
+    }
 
-    game.physics.p2.updateBoundsCollisionGroup();
+    player.body.onBeginContact.add(kurentTouching,this);
+    player.body.onEndContact.add(kurentTouchingEnd, this);
 
+    
 }
 
 function initControls(){
@@ -173,23 +210,28 @@ function playerMovement(){
 	if (cursors.left.isDown)
     {
         player.body.moveLeft(200);
-        player.animations.play('walkLeft', 12, false);
-
+        
         if (facing != 'left')
         {
             //player.animations.play('left');
             facing = 'left';
         }
+
+        if (player.touching) player.animations.play('walkLeft', 12, false);
+        else player.frame = 4;
     }
     else if (cursors.right.isDown)
     {
         player.body.moveRight(200);
-        player.animations.play('walkRight', 12, false);
+       
 
         if (facing != 'right')
         {
             facing = 'right';
         }
+
+        if (player.touching) player.animations.play('walkRight', 12, false);
+        else player.frame = 1;
     }
     else
     {
@@ -216,9 +258,11 @@ function playerMovement(){
     }
 
 
-    if (cursors.up.isDown && game.time.now > jumpTimer && checkIfCanJump()){
-    	player.body.moveUp(600);
+    if (cursors.up.isDown && game.time.now > jumpTimer && player.touching){
+    	player.body.moveUp(520);
         jumpTimer = game.time.now + 750;
+    } else if (cursors.up.isDown && !player.touching){
+        player.body.thrust(1000)
     }
     
     if (jumpButton.isDown)
@@ -227,6 +271,20 @@ function playerMovement(){
     }
 }
 
+function kurentTouching (a, b){
+    player.touching = true;
+}
+function kurentTouchingEnd (a, b){
+    player.touching = false;
+}
+
+function collisionFloor(){
+
+}
+function collisionBulletFloor(bullet){ // DETECTS BULLETS HITTING THE FLOOR
+    console.log(bullet)
+    bullet.sprite.kill();
+}
 
 function checkIfCanJump() {
 
