@@ -44,8 +44,164 @@
          "width":100,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "height":25,
+         "name":"Game Objects",
+         "objects":[
+                {
+                 "gid":145,
+                 "height":64,
+                 "id":4,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":704,
+                 "y":576
+                }, 
+                {
+                 "gid":145,
+                 "height":64,
+                 "id":5,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":1472,
+                 "y":512
+                }, 
+                {
+                 "gid":145,
+                 "height":64,
+                 "id":6,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":1280,
+                 "y":1088
+                }, 
+                {
+                 "gid":145,
+                 "height":64,
+                 "id":7,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":2624,
+                 "y":896
+                }, 
+                {
+                 "gid":145,
+                 "height":64,
+                 "id":8,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":2752,
+                 "y":1344
+                }, 
+                {
+                 "gid":145,
+                 "height":64,
+                 "id":9,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":128,
+                 "y":1088
+                }, 
+                {
+                 "gid":145,
+                 "height":64,
+                 "id":10,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":960,
+                 "y":1408
+                }, 
+                {
+                 "gid":145,
+                 "height":64,
+                 "id":11,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":704,
+                 "y":576
+                }, 
+                {
+                 "gid":146,
+                 "height":64,
+                 "id":12,
+                 "name":"player",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":320,
+                 "y":832
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":100,
+         "x":0,
+         "y":0
         }],
- "nextobjectid":1,
+ "nextobjectid":14,
  "orientation":"orthogonal",
  "properties":
     {
@@ -99,6 +255,22 @@
             },
          "spacing":0,
          "tilecount":48,
+         "tileheight":64,
+         "tilewidth":64
+        }, 
+        {
+         "firstgid":145,
+         "image":"obj-tilesheet.png",
+         "imageheight":64,
+         "imagewidth":128,
+         "margin":0,
+         "name":"obj-tilesheet",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tilecount":2,
          "tileheight":64,
          "tilewidth":64
         }],
