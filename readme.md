@@ -11,7 +11,7 @@ Platformer game.
 - **SPACE:** shooting
 
 #### Now with gamepad support!
-- **LEFT, RIGHT:** - movement horizontally
+- **LEFT, RIGHT:** - horizontal movement
 - **B:** jumping
 - **Y:** shooting
 
