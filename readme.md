@@ -15,7 +15,7 @@ Platformer game.
 - **B:** jumping
 - **Y:** shooting
 
-![kurent](https://github.com/belakm/kurent/raw/master/scs.png)
+![kurent](https://github.com/belakm/kurent/raw/master/scs104.png)
 
 ### Developed by
 
