@@ -6,20 +6,29 @@ gameStates.Start = {
 
     preload: function() {
         // That's where we load the game's assets
-        game.load.image('btnStart','assets/buttons/start.png');
+        game.load.image('gumb','assets/buttons/gumb-trans.png');
+        game.load.image('background','assets/buttons/menu.png');
     },
 
     create: function() { 
-    	game.world.width = 864;
-    	game.world.height = 480;
-    	game.stage.backgroundColor = '#182d3b';
+    	game.world.width = 1280;
+    	game.world.height = 720;
+        game.stage.backgroundColor = '#f3f3f3';
 
-    	buttonStart = game.add.button(game.world.centerX - 100, game.world.centerY + 80, 'btnStart', startTheGame, this, 2, 1, 0);
+        backgroundImage = game.add.sprite(0, 0, 'background');
+        backgroundImage.width = 1280;
+        backgroundImage.height = 720;
+        backgroundImage.blendMode = PIXI.blendModes.SATURATION;
 
-		var text = "Startmenu";
-	    var style = { font: "65px Arial", fill: "#ff0044", align: "center" };
+    	buttonStart = game.add.button(game.world.centerX - 180, game.world.centerY - 60, 'gumb', startTheGame, this, 2, 1, 0);
+        buttonStart.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
+        buttonStart.scale.set(3,3)
 
-	    var t = game.add.text(game.world.centerX-300, 100, text, style);
+        var text = "START";
+
+	    var style = { font: "65px Arial", fill: "#232323", align: "center" };
+
+	    var t = game.add.text(game.world.centerX - 180 + 70, game.world.centerY - 60 + 20, text, style);
     },
 
     update: function() {
@@ -28,5 +37,6 @@ gameStates.Start = {
 };
 
 function startTheGame(){
+    game.stage.backgroundColor = '#f3f3f3';
 	game.state.start('Level');
 }

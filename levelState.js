@@ -34,28 +34,27 @@ gameStates.Level = {
     preload: function() {
 
         // That's where we load the game's assets
-        game.load.image('btnEndIt','assets/buttons/endit.png');
-        game.load.image('btnGameMenu','assets/buttons/gamemenu.png');
+        //game.load.image('gumb','assets/buttons/gumb-trans.png');
 
         //game.load.image('coin','assets/misc/coin.png');
 
         // PLAYER
-        game.load.spritesheet('player', 'assets/objects/kurent-sprite.png', 30, 53, 12);
+        game.load.spritesheet('player', 'assets/objects/kurent-sprite-optim.png', 30, 53, 12);
 
         // BULLET
 		game.load.image('bullet', 'assets/objects/bullet.png');
 
         // FLOWERS
-        game.load.spritesheet('flower1', 'assets/objects/zvoncek-manjsi.png', 32, 32, 6);
+        game.load.spritesheet('flower1', 'assets/objects/zvoncek.png', 16, 16, 6);
 
         // LEVEL
 
-        game.load.tilemap('tilemap2', 'assets/level/kurent-test-level-2.json', null, Phaser.Tilemap.TILED_JSON);
-        game.load.image('tiles2', 'assets/level/test-tileset-2.png');
-        game.load.image('tiles3', 'assets/level/test-tileset-2-back.png');
-        game.load.image('tiles4', 'assets/level/test-tileset-2-back-moving.png');
+        game.load.tilemap('tilemap2', 'assets/level/32/level32.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.image('tiles2', 'assets/level/32/sprite_sheet-ground.png');
+        game.load.image('tiles3', 'assets/level/32/sprite_sheet-background.png');
+        game.load.image('tiles4', 'assets/level/32/sprite_sheet-scrolling.png');
         // GAME OBJECTS
-        game.load.image('gameObjects', 'assets/level/obj-tilesheet.png');
+        game.load.image('gameObjects', 'assets/level/32/obj-tilesheet.png');
         //game.load.image('tiles', 'assets/level/test.png');
 
 	    // BULLET SOUNDS
@@ -63,9 +62,13 @@ gameStates.Level = {
 	    game.load.audio('bulletFire', 'assets/sounds/bullet.mp3');
 
 	    //game.load.audio('ambience', 'assets/sounds/darth-sidneyous-space-techrough-draft.mp3');
+	    game.load.audio('iceCrash', 'assets/sounds/icecrash.mp3');
+	    game.load.audio('winterydoomroom', 'assets/sounds/winterydoomroom.mp3');
     },
 
     create: function() { 
+
+    	SCORE = 0;
 
         game.input.gamepad.start();
         pad = game.input.gamepad.pad1;
@@ -82,6 +85,8 @@ gameStates.Level = {
 
     	bulletFire = game.add.audio('bulletFire', 0.03, false);
         bulletHitWall = game.add.audio('bulletHitWall', 0.03, false);
+        iceCrash = game.add.audio('iceCrash', 0.2, false);
+        winterydoomroom = game.add.audio('winterydoomroom', 0.15, true);
 
     	//ambientMusic = game.add.audio('ambience', 0.3, true);
     	//ambientMusic.play();
@@ -99,7 +104,7 @@ gameStates.Level = {
 
         flowerCollisionGroup   = this.physics.p2.createCollisionGroup();
 
-    	initLevel();
+        initLevel();
     	initControls();
     	initPlayer();
         initFlowers();
@@ -107,7 +112,7 @@ gameStates.Level = {
         game.time.advancedTiming = true;
         game.physics.p2.updateBoundsCollisionGroup();
 
-        // GAMEPAD INPUT
+        winterydoomroom.play();
     },
 
     update: function() {
@@ -117,16 +122,22 @@ gameStates.Level = {
         playerMovement();
 
         playerDeath();
+
+        updateScore();
     },
 
     render: function() {
 
         // Camera
-        game.debug.text('FPS: ' + game.time.fps, 32, 14, "#00ff00"); 
-        game.debug.cameraInfo(game.camera, 32, 32, "#00ff00");
+        game.debug.text('FPS: ' + game.time.fps, game.width - 100, 14, "#00ff00"); 
+        //game.debug.cameraInfo(game.camera, 32, 32, "#00ff00");
 
     }
 };
+
+function updateScore(){
+	scoreBar.text = SCORE;
+}
 
 function addButtons(){
     //  We can't do this until we know that the gamepad has been connected and is started
@@ -251,18 +262,29 @@ function initLevel(){
 	game.stage.backgroundColor = "#a9f0ff";
 	
 	map = game.add.tilemap('tilemap2');
-	map.addTilesetImage('test-tileset-2', 'tiles2');
-    map.addTilesetImage('test-tileset-2-back', 'tiles3');
-    map.addTilesetImage('test-tileset-2-back-moving', 'tiles4');
+	map.addTilesetImage('sprite_sheet-ground', 'tiles2');
+    map.addTilesetImage('sprite_sheet-background', 'tiles3');
+    map.addTilesetImage('sprite_sheet-scrolling', 'tiles4');
 
 	//Add both the background and ground layers. We won't be doing anything with the
 	//GroundLayer though
-	backgroundLayer = map.createLayer('Background-moving');
-    backgroundMovinglayer = map.createLayer('Background-fixed');
+    backgroundMovinglayer = map.createLayer('Background scrolling');
+	backgroundLayer = map.createLayer('Background');
 	groundLayer = map.createLayer('Ground');
 
-    backgroundLayer.scrollFactorX = 0.5;
-    backgroundLayer.scrollFactorY = 0.5;
+    map.setCollisionBetween(0,50, true,'Ground');
+
+    groundLayer.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
+    backgroundMovinglayer.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
+    backgroundLayer.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
+
+    groundLayer.setScale(3, 3);
+    backgroundMovinglayer.setScale(3, 3);
+    backgroundLayer.setScale(3, 3);
+    //goLayer.scale.set(2, 2);
+
+    backgroundMovinglayer.scrollFactorX = 0.5;
+    backgroundMovinglayer.scrollFactorY = 0.5;
 
 	//Change the world size to match the size of this layer
 	groundLayer.resizeWorld();
@@ -270,30 +292,44 @@ function initLevel(){
 	//map.setCollisionByExclusion([0], true, 'groundLayer');
 
 	//Before you can use the collide function you need to set what tiles can collide
-	map.setCollisionBetween(0,50, true,'Ground');
 
-	tiles2 = game.physics.p2.convertTilemap(map, groundLayer, true, true);
-    polygons = game.physics.p2.convertCollisionObjects(map,"Object");
+    //polygons = game.physics.p2.convertCollisionObjects(map,"Object");
 
 	game.physics.p2.restitution = 0.1;
     game.physics.p2.gravity.y = 1000;
 
-	buttonEnd = game.add.button(100, 50, 'btnEndIt', endGame, this, 2, 1, 0);
-	buttonMenu = game.add.button(400, 50, 'btnGameMenu', pauseGame, this, 2, 1, 0);
+    tiles2 = game.physics.p2.convertTilemap(map, groundLayer, true, true);
 
-	buttonEnd.fixedToCamera = true;
-	buttonMenu.fixedToCamera = true;
+	buttonEnd = game.add.button(20, 20, 'gumb', endGame, this, 2, 1, 0);
+    buttonMenu = game.add.button(170, 20, 'gumb', pauseGame, this, 2, 1, 0);
+
+    var text = "DEATH";
+    var buttonTextStyle = { font: "18px Arial", fill: "#232323", align: "center" };
+    buttonDies = game.add.text(45, 33, text, buttonTextStyle);
+
+    var text = "PAUSE";
+    buttonPause = game.add.text(198, 33, text, buttonTextStyle);
 
 	var text = "Level happening";
 	var style = { font: "65px Arial", fill: "#ff0044", align: "center" };
 
 	t = game.add.text(game.world.centerX-300, 100, text, style);
 
+	var scoreStyle = { font: "64px Arial", fill: "#000", align: "right" };
+	scoreBar = game.add.text(game.width - 80, 40, '0', scoreStyle);
+
+	buttonEnd.fixedToCamera = true;
+	buttonMenu.fixedToCamera = true;
+	buttonDies.fixedToCamera = true;
+	buttonPause.fixedToCamera = true;
+	scoreBar.fixedToCamera = true;
+
     for (var i = 0; i < tiles2.length; i++) {
         var tileBody = tiles2[i];
         tileBody.setCollisionGroup(tilesCollisionGroup);
         tileBody.collides(playerCollisionGroup, collisionFloor);
         tileBody.collides(bulletCollisionGroup);
+        tileBody.collides(flowerCollisionGroup);
     }
 
     //polygons.setCollisionGroup(polygonCollisionGroup);
@@ -302,12 +338,9 @@ function initLevel(){
 function initPlayer(){
 
     playerGroup = game.add.group();
-    map.createFromObjects('Game Objects', 146, 'gameObjects', 0, true, false, playerGroup);
+    map.createFromObjects('Game objects', 63, 'gameObjects', 0, true, false, playerGroup);
     console.log(playerGroup.children[0]);
     setupObjects(playerGroup.children[0]);
-
-    //Make the camera follow the sprite
-	game.camera.follow(player);
 
 	// BULLETS
     this.bullets = game.add.group();
@@ -330,9 +363,6 @@ function initPlayer(){
         bulletBody.collides(tilesCollisionGroup, collisionBulletFloor);
         bulletBody.collides(polygonCollisionGroup);
     }
-
-    player.body.onBeginContact.add(kurentTouching,this);
-    player.body.onEndContact.add(kurentTouchingEnd, this);
 }
 
 
@@ -350,9 +380,7 @@ function initFlowers(){
     console.log('init object transformation from tileset');
 
     flowers = game.add.group();
-    flowers.enableBody = true;
-    flowers.physicsBodyType = Phaser.Physics.P2JS;
-    map.createFromObjects('Game Objects', 145, 'gameObjects', 0, true, false, flowers);
+    map.createFromObjects('Game objects', 61, 'gameObjects', 0, true, false, flowers);
     flowers.forEach(setupObjects,this);
 
     console.log('tileset -> object transformation complete');
@@ -363,6 +391,8 @@ function setupObjects(object){
         object.loadTexture('player', 0);
         object.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
         object.scale.setTo(3,3);
+        object.x = 3*object.x;
+        object.y = 3*object.y;
 
         game.physics.p2.enable(object);
 
@@ -380,17 +410,34 @@ function setupObjects(object){
         player.body.mass = 2;
 
         player.touching = false;
+        player.body.onBeginContact.add(kurentTouching,this);
+  		player.body.onEndContact.add(kurentTouchingEnd, this);
+  		game.camera.follow(player, Phaser.Camera.FOLLOW_PLATFORMER);
     } else {
         object.loadTexture('flower1', 0);
+        object.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
+        object.scale.setTo(3,3);
+        object.x = 3*object.x;
+        object.y = 3*object.y;
+
+        object.nameType = 'flower';
+
+        object.physicsBodyType = Phaser.Physics.P2JS;
         game.physics.p2.enable(object);
 
+        object.body.data.shapes[0].sensor = true;
+
         object.animations.add('bloom');
+
         object.body.static = true;
-        object.body.x = object.x+32;
-        object.body.y = object.y+48;
+
+        object.body.x = object.body.x + 32;
+        object.body.y = object.body.y + 169;
 
         object.body.setCollisionGroup(flowerCollisionGroup);
-        object.body.collides(playerCollisionGroup, collisionFlower);
+	    //object.body.collides(tilesCollisionGroup);
+	    object.body.collides(playerCollisionGroup);
+	    object.body.onBeginContact.add(collisionFlower, this);
 
         console.log('seting up '+object.name, 'object: ', object);
     }
@@ -459,10 +506,13 @@ function playerMovement(){
     }
 }
 
-function kurentTouching (a, b){
+function kurentTouching (a, b, c, d){
+	if (a.sprite != null && a.sprite.nameType == 'flower') return 0;
     player.touching = true;
+    shakeWorld();
 }
-function kurentTouchingEnd (a, b){
+function kurentTouchingEnd (a, b, c, d){
+	if (a.sprite != null && a.sprite.nameType == 'flower') return 0;
     player.touching = false;
 }
 
@@ -473,9 +523,13 @@ function collisionBulletFloor(bullet){ // DETECTS BULLETS HITTING THE FLOOR
     killBullet(bullet.sprite)
     bulletHitWall.play();
 }
-function collisionFlower(flower){
-    flower.sprite.animations.play('bloom', 12, false);
-    flower.sprite.body.clearCollision(playerCollisionGroup);
+function collisionFlower(a, b, c, d){
+	var flower = c.body.parent.sprite;
+    flower.body.clearCollision(playerCollisionGroup);
+    flower.animations.play('bloom', 12, false);
+    player.body.thrust(10);
+    iceCrash.play();
+    SCORE++;
 }
 
 function checkIfCanJump() {
@@ -534,10 +588,13 @@ function playerCollision(){
 
 
 function playerDeath(){
-	if (!player.inWorld) endGame();
+	if (!player.inWorld) {
+		endGame();
+	}
 }
 
 function endGame(){
+	winterydoomroom.destroy();
 	game.state.start('End');
 }
 function pauseGame(){
@@ -548,4 +605,8 @@ function pauseGame(){
 function unPause(){
 	t.text = "Level happening";
 	game.paused = false;
+}
+
+function shakeWorld(){
+	
 }
