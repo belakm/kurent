@@ -44,6 +44,9 @@ gameStates.Level = {
         // BULLET
 		game.load.image('bullet', 'assets/objects/bullet.png');
 
+		// SNOWFLAKE
+		game.load.spritesheet('snowflake', 'assets/misc/snowflake.jpg');
+
         // FLOWERS
         game.load.spritesheet('flower1', 'assets/objects/zvoncek.png', 16, 16, 6);
 
@@ -108,6 +111,8 @@ gameStates.Level = {
     	initControls();
     	initPlayer();
         initFlowers();
+
+        initSnow();
 
         game.time.advancedTiming = true;
         game.physics.p2.updateBoundsCollisionGroup();
@@ -304,18 +309,18 @@ function initLevel(){
     buttonMenu = game.add.button(170, 20, 'gumb', pauseGame, this, 2, 1, 0);
 
     var text = "DEATH";
-    var buttonTextStyle = { font: "18px Arial", fill: "#232323", align: "center" };
+    var buttonTextStyle = { font: "18px fixedsys", fill: "#232323", align: "center" };
     buttonDies = game.add.text(45, 33, text, buttonTextStyle);
 
     var text = "PAUSE";
     buttonPause = game.add.text(198, 33, text, buttonTextStyle);
 
 	var text = "Level happening";
-	var style = { font: "65px Arial", fill: "#ff0044", align: "center" };
+	var style = { font: "65px fixedsys", fill: "#ff0044", align: "center" };
 
 	t = game.add.text(game.world.centerX-300, 100, text, style);
 
-	var scoreStyle = { font: "64px Arial", fill: "#000", align: "right" };
+	var scoreStyle = { font: "64px fixedsys", fill: "#000", align: "right" };
 	scoreBar = game.add.text(game.width - 80, 40, '0', scoreStyle);
 
 	buttonEnd.fixedToCamera = true;
@@ -330,6 +335,7 @@ function initLevel(){
         tileBody.collides(playerCollisionGroup, collisionFloor);
         tileBody.collides(bulletCollisionGroup);
         tileBody.collides(flowerCollisionGroup);
+        tileBody.nameType = 'tile';
     }
 
     //polygons.setCollisionGroup(polygonCollisionGroup);
@@ -365,6 +371,85 @@ function initPlayer(){
     }
 }
 
+/* SNOW */ 
+
+var max = 0;
+var front_emitter;
+var mid_emitter;
+var back_emitter;
+var update_interval = 4 * 60;
+var i = 0;
+
+function initSnow(){
+	back_emitter = game.add.emitter(game.world.centerX, -32, 600);
+    back_emitter.makeParticles('snowflake');
+    back_emitter.maxParticleScale = 3;
+    back_emitter.minParticleScale = 3;
+    back_emitter.setYSpeed(20, 100);
+    back_emitter.gravity = 0;
+    back_emitter.width = game.world.width * 1.5;
+    back_emitter.minRotation = 0;
+    back_emitter.maxRotation = 0;
+
+    mid_emitter = game.add.emitter(game.world.centerX, -32, 250);
+    mid_emitter.makeParticles('snowflake');
+    mid_emitter.maxParticleScale = 6;
+    mid_emitter.minParticleScale = 6;
+    mid_emitter.setYSpeed(50, 150);
+    mid_emitter.gravity = 0;
+    mid_emitter.width = game.world.width * 1.5;
+    mid_emitter.minRotation = 0;
+    mid_emitter.maxRotation = 0;
+
+    front_emitter = game.add.emitter(game.world.centerX, -32, 50);
+    front_emitter.makeParticles('snowflake');
+    front_emitter.maxParticleScale = 9;
+    front_emitter.minParticleScale = 9;
+    front_emitter.setYSpeed(100, 200);
+    front_emitter.gravity = 0;
+    front_emitter.width = game.world.width * 1.5;
+    front_emitter.minRotation = 0;
+    front_emitter.maxRotation = 0;
+
+    back_emitter.fixedToCamera = true;
+	mid_emitter.fixedToCamera = true;
+	front_emitter.fixedToCamera = true;
+
+    changeWindDirection();
+
+    back_emitter.start(false, 14000, 20);
+    mid_emitter.start(false, 12000, 40);
+    front_emitter.start(false, 6000, 1000);
+}
+function changeWindDirection() {
+
+    var multi = Math.floor((max + 200) / 4),
+        frag = (Math.floor(Math.random() * 100) - multi);
+    max = max + frag;
+
+    if (max > 200) max = 150;
+    if (max < -200) max = -150;
+
+    setXSpeed(back_emitter, max);
+    setXSpeed(mid_emitter, max);
+    setXSpeed(front_emitter, max);
+
+}
+
+function setXSpeed(emitter, max) {
+
+    emitter.setXSpeed(max - 20, max);
+    emitter.forEachAlive(setParticleXSpeed, this, max);
+
+}
+
+function setParticleXSpeed(particle, max) {
+
+    particle.body.velocity.x = max - Math.floor(Math.random() * 30);
+
+}
+
+/* END SNOW */ 
 
 function initFlowers(){
     /*flower1 = game.add.sprite(768, 560, 'flower1');
@@ -508,6 +593,7 @@ function playerMovement(){
 
 function kurentTouching (a, b, c, d){
 	if (a.sprite != null && a.sprite.nameType == 'flower') return 0;
+	if (a.nameType == 'tile') console.log('tile');
     player.touching = true;
     shakeWorld();
 }

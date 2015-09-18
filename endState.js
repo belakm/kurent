@@ -26,7 +26,7 @@ gameStates.End = {
 
         var text = "RESTART";
 
-        var style = { font: "65px Arial", fill: "#232323", align: "center" };
+        var style = { font: "65px fixedsys", fill: "#232323", align: "center" };
 
         var t = game.add.text(game.world.centerX - 180 + 20, game.world.centerY + 80, text, style);
 
@@ -36,12 +36,12 @@ gameStates.End = {
 
         var text = "MENU";
 
-        var style = { font: "65px Arial", fill: "#232323", align: "center" };
+        var style = { font: "65px fixedsys", fill: "#232323", align: "center" };
 
         var t = game.add.text(game.world.centerX - 180 + 90, game.world.centerY -80, text, style);
 
         var scoreText = "Score: " + SCORE;
-        var scoreStyle = { font: "64px Arial", fill: "#fff", align: "right" };
+        var scoreStyle = { font: "64px fixedsys", fill: "#fff", align: "right" };
         scoreEnd = game.add.text(game.world.centerX - 100, 150, scoreText, scoreStyle);
     },
 

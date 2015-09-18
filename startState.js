@@ -26,7 +26,7 @@ gameStates.Start = {
 
         var text = "START";
 
-	    var style = { font: "65px Arial", fill: "#232323", align: "center" };
+	    var style = { font: "65px fixedsys", fill: "#232323", align: "center" };
 
 	    var t = game.add.text(game.world.centerX - 180 + 70, game.world.centerY - 60 + 20, text, style);
     },
