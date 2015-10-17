@@ -1,6 +1,6 @@
 # Kurentovanje
 
-### Version **1.0.4**
+### Version **1.0.3**
 
 Platformer game.
 
@@ -10,12 +10,7 @@ Platformer game.
 - **WASD:** movement
 - **SPACE:** shooting
 
-#### Now with gamepad support!
-- **LEFT, RIGHT:** - horizontal movement
-- **B:** jumping
-- **Y:** shooting
-
-![kurent](https://github.com/belakm/kurent/raw/master/scs104.png)
+![kurent](https://github.com/belakm/kurent/raw/master/scs.png)
 
 ### Developed by
 

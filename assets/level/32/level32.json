@@ -965,6 +965,230 @@
                  "width":32,
                  "x":320,
                  "y":416
+                }, 
+                {
+                 "gid":65,
+                 "height":32,
+                 "id":65,
+                 "name":"enemy",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":192,
+                 "y":672
+                }, 
+                {
+                 "gid":65,
+                 "height":32,
+                 "id":66,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":672,
+                 "y":672
+                }, 
+                {
+                 "gid":65,
+                 "height":32,
+                 "id":67,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":960,
+                 "y":672
+                }, 
+                {
+                 "gid":65,
+                 "height":32,
+                 "id":68,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":960,
+                 "y":416
+                }, 
+                {
+                 "gid":65,
+                 "height":32,
+                 "id":69,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":768,
+                 "y":416
+                }, 
+                {
+                 "gid":65,
+                 "height":32,
+                 "id":70,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":256,
+                 "y":416
+                }, 
+                {
+                 "gid":65,
+                 "height":32,
+                 "id":71,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":800,
+                 "y":224
+                }, 
+                {
+                 "gid":65,
+                 "height":32,
+                 "id":72,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":1632,
+                 "y":384
+                }, 
+                {
+                 "gid":65,
+                 "height":32,
+                 "id":73,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":1824,
+                 "y":576
+                }, 
+                {
+                 "gid":65,
+                 "height":32,
+                 "id":74,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":2560,
+                 "y":576
+                }, 
+                {
+                 "gid":65,
+                 "height":32,
+                 "id":75,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":2272,
+                 "y":256
+                }, 
+                {
+                 "gid":65,
+                 "height":32,
+                 "id":76,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":2656,
+                 "y":224
+                }, 
+                {
+                 "gid":65,
+                 "height":32,
+                 "id":77,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":3008,
+                 "y":576
+                }, 
+                {
+                 "gid":65,
+                 "height":32,
+                 "id":78,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":2784,
+                 "y":352
                 }],
          "opacity":0.150000005960464,
          "type":"objectgroup",
@@ -973,7 +1197,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":65,
+ "nextobjectid":79,
  "orientation":"orthogonal",
  "properties":
     {
