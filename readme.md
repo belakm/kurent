@@ -22,7 +22,7 @@ Jump around, help flowers bloom and kill werewolves.
 
 ### Developed by
 
-- CODE: **Mitja Belak / Matic Breskvar**
+- CODE: **Mitja Belak**
 - ART: **Lenart Slabe**
 
 ### Developed with
