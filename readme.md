@@ -1,6 +1,6 @@
 # Kurentovanje
 
-### Version **1.0.4**
+### Version **1.1**
 
 Platformer game.
 
@@ -10,7 +10,15 @@ Platformer game.
 - **WASD:** movement
 - **SPACE:** shooting
 
+Also supported gamepad.
+
+### What to do
+
+Jump around, help flowers bloom and kill werewolves.
+
 ![kurent](https://github.com/belakm/kurent/raw/master/scs.png)
+
+![kurent](https://github.com/belakm/kurent/raw/master/scsMobile.png)
 
 ### Developed by
 
