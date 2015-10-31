@@ -10,7 +10,7 @@ Platformer game.
 - **WASD:** movement
 - **SPACE:** shooting
 
-Also supported gamepad.
+Also supports gamepad.
 
 ### What to do
 
